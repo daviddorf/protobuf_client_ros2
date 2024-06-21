@@ -65,7 +65,7 @@ void ProtobufClientNode::on_timer()
   }
   else
   {
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Disconnected from Gateway...");
+    RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "Disconnected from Gateway...");
     // Try to reconnect
     client_->connect(gateway_ip_, gateway_port_);
     try
@@ -89,7 +89,7 @@ void ProtobufClientNode::to_gateway_cb(const protobuf_client_interfaces::msg::Ga
   to_gateway.set_client_double(msg->gateway_double);
   to_gateway.set_client_string(msg->gateway_string);
 
-  RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Client Key: %s", msg->gateway_key.c_str());
+  RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "Client Key: %s", msg->gateway_key.c_str());
 
   if (client_->connected())
   {
@@ -114,11 +114,11 @@ void ProtobufClientNode::connect_to_gateway()
     {
       if (!print_loop_error)
       {
-        RCLCPP_ERROR_THROTTLE(this->get_logger(), *this->get_clock(), 5000, "Waiting for Gateway connection...");
+        RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 10000, "Waiting for Gateway connection...");
       }
     }
   }
-  RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Connected to gateway");
+  RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "Connected to gateway");
 
   // Send kickoff message to gateway
   moos::gateway::ToGateway msg;
@@ -132,7 +132,7 @@ void ProtobufClientNode::connect_to_gateway()
 
   if (client_->connected())
   {
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Sending kickoff msg: %s", msg.ShortDebugString().c_str());
+    RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "Sending kickoff msg: %s", msg.ShortDebugString().c_str());
     client_->write(msg);
   }
 }
@@ -153,7 +153,7 @@ void ProtobufClientNode::ingest_gateway_msg()
         gateway_msg.gateway_double = msg.gateway_double();
         // Publish Gateway msg
         pub_gateway_msg_->publish(gateway_msg);
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),
+        RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"),
                     "Received Gateway Key: %s", gateway_msg.gateway_key.c_str());
       });
 }
