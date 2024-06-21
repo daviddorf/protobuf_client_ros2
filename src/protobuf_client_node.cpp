@@ -118,7 +118,7 @@ void ProtobufClientNode::connect_to_gateway()
       }
     }
   }
-  RCLCPP_DEBUG(rclcpp::get_logger("rclcpp"), "Connected to gateway");
+  RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Connected to gateway");
 
   // Send kickoff message to gateway
   moos::gateway::ToGateway msg;
